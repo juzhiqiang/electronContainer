@@ -1,0 +1,12 @@
+{
+  "isOpenServer": false,
+  "prot": 8089,
+  "isFullscreen": false,
+  "isWindowOnTop": false,
+  "isLocalFile": true,
+  "href": "./index.html",
+  "isHttpsCheck": false,
+  "devTool": false,
+  "isExcelReadWrit": false,
+  "excelFileUrl": ""
+}
