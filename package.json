@@ -4,13 +4,50 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "tsc --build && electron .",
+    "start": "tsc --build &&  electron .",
+    "build": "electron-builder --win",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "build": {
+    "appId": "loveElectron",
+    "productName": "提亚数字科技",
+    "extraResources": [
+      {
+        "from": "./config/index.json",
+        "to": "../config/config.json"
+      },
+      {
+        "from": "./public/",
+        "to": "../public/"
+      }
+    ],
+    "win": {
+      "icon": "/public/images/logo.jpg",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "displayLanguageSelector": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "theia"
+    }
+  },
   "devDependencies": {
-    "electron": "^24.1.2"
+    "electron": "^24.1.2",
+    "electron-builder": "^23.6.0"
   }
 }
