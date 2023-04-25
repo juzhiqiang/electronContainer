@@ -4,8 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "tsc --build &&  electron .",
-    "build": "electron-builder --win",
+    "start": "tsc --build && electron .",
+    "build": "tsc --build && electron-builder --win",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -47,7 +47,12 @@
     }
   },
   "devDependencies": {
+    "@types/node": "^18.16.0",
     "electron": "^24.1.2",
-    "electron-builder": "^23.6.0"
+    "electron-builder": "^23.6.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "http-proxy": "^1.18.1"
   }
 }

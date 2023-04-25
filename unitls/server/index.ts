@@ -1,6 +1,38 @@
 // 启用独立服务
 const http = require("http");
 const os = require("os");
+const httpProxy = require("http-proxy");
+
+const _proxyApi = (target: string) => {
+  const proxy = httpProxy.createProxyServer({
+    target: target,
+    changeOrigin: true,
+  });
+
+  // 监听代理服务器的 proxyRes 事件
+  proxy.on("proxyRes", function (proxyRes, req, res) {
+    // 获取响应数据
+    let body = [];
+    proxyRes.on("data", function (chunk) {
+      body.push(chunk);
+    });
+    proxyRes.on("end", function () {
+      let bodys = Buffer.concat(body).toString();
+      res.end(bodys);
+    });
+  });
+
+  proxy.on("error", function (err, req, res) {
+    res.writeHead(500, {
+      "content-type": "text/plain",
+    });
+    res.end(
+      "Something went wrong. And we are reporting a custom error message."
+    );
+  });
+
+  return proxy;
+};
 
 // 获取本机的局域网IP
 export const getServerIp = () => {
@@ -20,8 +52,18 @@ export const getServerIp = () => {
   }
 };
 
+function getProxyPrefix(url) {
+  const regex = /([^/]+)\/.+$/;
+  const match = url.match(regex);
+  if (match && match.length > 1) {
+    return match[1];
+  } else {
+    return "";
+  }
+}
+
 // 开启局域网接口
-export const openServer = (prot: number) => {
+export const openServer = (prot: number, proxy: {} = {}) => {
   // 获取本机的局域网IP和自定义端口
   let SERVER_PORT = prot || 9000;
   let SERVER_IP = getServerIp();
@@ -32,6 +74,16 @@ export const openServer = (prot: number) => {
       "Content-Type": "application/json;charset=utf-8",
       "access-control-allow-origin": "*",
     });
+
+    // 接口代理内容
+    // const _proxyKeys = Object.keys(proxy);
+    // if (_proxyKeys.length > 0) {
+    //   const curKey = getProxyPrefix(req.url);
+    //   req.url = req.url.replace(`/${curKey}`, "");
+    // _proxyApi(proxy[`/${curKey}`].target).web(req, res);
+    // }
+    _proxyApi("http://apijson.cn:8080").web(req, res);
+
     // 请求接口数据
     if (req.method === "POST" && req.url === "/api/authentication") {
       let context = {

@@ -7,7 +7,7 @@ const fs = require("fs");
 const _Config: _initConfig = JSON.parse(
   fs.readFileSync("./config/index.json", "utf-8")
 );
-console.log(_Config);
+
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: _Config.width || 800,
@@ -39,11 +39,13 @@ if (_Config.isHttpsCheck)
 if (_Config.isOpenServer) openServer(_Config.prot);
 
 // 这段程序将会在 Electron 结束初始化和创建浏览器窗口的时候调用部分 API 在 ready 事件触发后才能使用。
-app.whenReady().then(() => {
-  createWindow();
-  app.on("activate", () => {
-    // 在 macOS 系统内, 如果没有已开启的应用窗口，点击托盘图标时通常会重新创建一个新窗口
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+app.on("ready", () => {
+  app.whenReady().then(() => {
+    createWindow();
+    app.on("activate", () => {
+      // 在 macOS 系统内, 如果没有已开启的应用窗口，点击托盘图标时通常会重新创建一个新窗口
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
   });
 });
 

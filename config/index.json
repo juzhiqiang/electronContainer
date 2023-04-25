@@ -1,5 +1,5 @@
 {
-  "isOpenServer": false,
+  "isOpenServer": true,
   "prot": 8089,
   "isFullscreen": false,
   "isWindowOnTop": false,
