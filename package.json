@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "tsc --build && electron .",
-    "build": "tsc --build && electron-builder --win",
+    "build": "tsc --build && electron-builder --win && tsc --build --clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
