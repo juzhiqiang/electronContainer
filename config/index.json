@@ -8,5 +8,7 @@
   "isHttpsCheck": false,
   "devTool": false,
   "isExcelReadWrit": false,
-  "excelFileUrl": ""
+  "excelFileUrl": "",
+  "fileDir":"D:/localProject/electronContainer",
+  "proxy": {}
 }

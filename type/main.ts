@@ -22,4 +22,16 @@ export interface _initConfig {
   isExcelReadWrit: boolean;
   //   excel地址
   excelFileUrl: string;
+  // 本地文件存放位置
+  fileDir: string;
+  // 代理配置
+  proxy?: {
+    [proxyname: string]: {
+      target: string;
+      changeOrigin: boolean;
+      pathRewrite: {
+        [rewriteName: string]: [rewriteValue: string];
+      };
+    };
+  };
 }
