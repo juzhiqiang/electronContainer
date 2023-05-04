@@ -125,11 +125,10 @@ export const openServer = (config: _initConfig) => {
               body.push(chunk);
             });
             requse.on("end", function () {
-              // let bodys = Buffer.concat(body).toString();
-              // const dataJson = JSON.parse(bodys);
-              const rootPath = path.join(__dirname, "..", "..", "/");
-              const filePath = path.join(rootPath, `/localData/test.json`);
-              // const jsonData = JSON.stringify(dataJson);
+              const filePath = path.join(
+                config.fileDir,
+                `/localData${req.url}.json`
+              );
               if (!fs.existsSync(filePath)) {
                 // 如果文件不存在，则创建它
                 fs.writeFileSync(filePath, JSON.stringify({}));
@@ -164,26 +163,34 @@ export const openServer = (config: _initConfig) => {
               body.push(chunk);
             });
             requse.on("end", function () {
-              // let bodys = Buffer.concat(body).toString();
-              // const dataJson = JSON.parse(bodys);
               const filePath = path.join(
                 config.fileDir,
                 `/localData${req.url}.json`
               );
-              // const jsonData = JSON.stringify(dataJson);
               if (!fs.existsSync(filePath)) {
                 // 如果文件不存在，则创建它
                 fs.writeFileSync(filePath, JSON.stringify({}));
               }
 
-              fs.writeFileSync(filePath, body[0], function (err) {
-                if (err) {
-                  console.error(err);
-                } else {
-                  console.log("写入成功!");
-                }
-              });
-              res.end(body[0]);
+              if (JSON.parse(body[0]).code !== 200) {
+                fs.writeFileSync(filePath, body[0], function (err) {
+                  if (err) console.error(err);
+                });
+                res.end(body[0]);
+              } else {
+                fs.readFile(filePath, "utf-8", function (err, data) {
+                  if (err) {
+                    res.end(
+                      JSON.stringify({
+                        code: 500,
+                        message: "本地文件不存在",
+                      })
+                    );
+                  } else {
+                    res.end(data);
+                  }
+                });
+              }
             });
           }
         );
